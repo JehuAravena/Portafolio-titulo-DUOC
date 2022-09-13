@@ -14,4 +14,10 @@ def contacto(request):
 def tienda(request):
     return render(request, 'tienda/tienda.html')
 
+def login(request):
+    return render(request, 'tienda/login.html')
+
+def carrito(request):
+    return render(request, 'tienda/carrito.html')
+
     
