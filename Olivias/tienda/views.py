@@ -20,4 +20,8 @@ def login(request):
 def carrito(request):
     return render(request, 'tienda/carrito.html')
 
+def venta(request):
+    return render(request, 'tienda/venta.html')
+
+
     
