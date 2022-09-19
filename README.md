@@ -9,5 +9,7 @@ Para empezar:
 Librerías de Python
 - pip install Django
 - pip install djangorestframework
+- pip install mysqlclient
+- pip install Pillow
 
 por medio de la consola ingresar a la carpeta del proyecto "olivia" y ejecutar `manage.py runserver` y listeque

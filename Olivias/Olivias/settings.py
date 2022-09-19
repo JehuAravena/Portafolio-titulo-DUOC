@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'tienda.apps.TiendaConfig', #Agregamos nuestra app tienda para que Django pueda reconocerla y trabajar con ella.
+    # Agregamos nuestra app tienda para que Django pueda reconocerla y trabajar con ella.
+    'tienda.apps.TiendaConfig',
 ]
 
 MIDDLEWARE = [
@@ -76,10 +77,24 @@ WSGI_APPLICATION = 'olivias.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#    }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'olivias',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3310',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
     }
 }
 
@@ -130,3 +145,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+# se agrega la carpeta media
+MEDIA_ROOT = 'static/imagenes/'
+
+MEDIA_URL = '/media/'

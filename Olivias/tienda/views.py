@@ -1,5 +1,6 @@
 from multiprocessing import context
 from django.shortcuts import render
+from .models import *
 
 # Create your views here.
 def inicio(request):
@@ -12,7 +13,9 @@ def contacto(request):
     return render(request, 'tienda/contacto.html')
 
 def tienda(request):
-    return render(request, 'tienda/tienda.html')
+    productos = producto.objects.all()
+    context = {'productos': productos}
+    return render(request, 'tienda/tienda.html', context)
 
 def login(request):
     return render(request, 'tienda/login.html')
