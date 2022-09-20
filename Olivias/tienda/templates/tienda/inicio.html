@@ -70,8 +70,8 @@
     </nav>
     <hr />
 
+    {% block content %}
     <div class="container">
-      {% block content %}
       <div
         id="carouselExampleCaptions"
         class="carousel slide"
@@ -100,45 +100,39 @@
           ></button>
         </div>
         <div class="carousel-inner">
-          <div class="carousel-item active">
+          {% for producto in productos|slice:":3" %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
             <img
-              src="{% static 'placeholder.png' %}"
+              src="{{ producto.imagen.url }}"
               class="d-block w-100"
-              alt="{% static 'placeholder.png' %}"
+              alt="{{ producto.nombre }}"
             />
             <div class="carousel-caption d-none d-md-block">
-              <h5>First slide label</h5>
-              <p>
-                Some representative placeholder content for the first slide.
+              <h5
+                style="
+                  color: #ffffff;
+                  background-color: #000000;
+                  opacity: 0.8;
+                  border-radius: 50px 20px;
+                  padding: 1%;
+                "
+              >
+                {{ producto.nombre }}
+              </h5>
+              <p
+                style="
+                  color: #ffffff;
+                  background-color: #000000;
+                  opacity: 0.8;
+                  border-radius: 50px 20px;
+                  padding: 2%;
+                "
+              >
+                {{ producto.descripcion }}
               </p>
             </div>
           </div>
-          <div class="carousel-item">
-            <img
-              src="{% static 'placeholder.png' %}"
-              class="d-block w-100"
-              alt="{% static 'placeholder.png' %}"
-            />
-            <div class="carousel-caption d-none d-md-block">
-              <h5>Second slide label</h5>
-              <p>
-                Some representative placeholder content for the second slide.
-              </p>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <img
-              src="{% static 'placeholder.png' %}"
-              class="d-block w-100"
-              alt="{% static 'placeholder.png' %}"
-            />
-            <div class="carousel-caption d-none d-md-block">
-              <h5>Third slide label</h5>
-              <p>
-                Some representative placeholder content for the third slide.
-              </p>
-            </div>
-          </div>
+          {% endfor %}
         </div>
         <button
           class="carousel-control-prev"
@@ -165,8 +159,8 @@
           >Visitar Tienda</a
         >
       </center>
-      {% endblock content%}
     </div>
+    {% endblock content%}
 
     <!-- JavaScript Bundle with Popper -->
     <script

@@ -4,7 +4,9 @@ from .models import *
 
 # Create your views here.
 def inicio(request):
-    return render(request, 'tienda/inicio.html')
+    productos = producto.objects.all()
+    context = {'productos': productos}
+    return render(request, 'tienda/inicio.html', context)
 
 def nosotros(request):
     return render(request, 'tienda/nosotros.html')
