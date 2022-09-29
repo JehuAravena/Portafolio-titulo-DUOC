@@ -1,10 +1,9 @@
-import imp
 from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
 
 
-class cliente(models.Model):
+class Clientes(models.Model):
     user = models.OneToOneField(
         User, null=True, blank=True, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=200, null=True)
@@ -14,7 +13,7 @@ class cliente(models.Model):
         return self.nombre
 
 
-class producto(models.Model):
+class Productos(models.Model):
     nombre = models.CharField(max_length=200, null=True)
     precio = models.FloatField()
     descripcion = models.CharField(max_length=500, null=True)
@@ -24,28 +23,43 @@ class producto(models.Model):
         return self.nombre
 
 
-class pedido(models.Model):
-    cliente = models.ForeignKey(cliente, null=True, on_delete=models.SET_NULL)
-    producto = models.ForeignKey(
-        producto, null=True, on_delete=models.SET_NULL)
+class Pedidos(models.Model):
+    cliente = models.ForeignKey(Clientes, null=True, on_delete=models.SET_NULL)
+    # Producto = models.ForeignKey(
+    #     Producto, null=True, on_delete=models.SET_NULL)
     fecha_creacion = models.DateTimeField(auto_now_add=True, null=True)
-    estado = models.BooleanField(default=False)
+    estado = models.BooleanField(default=False) # completado o no completado
+    id_transaccion = models.CharField(max_length=200, null=True)
 
     def __str__(self):
-        return self.producto.nombre
+        return str(self.id)
 
-class prod_pedido(models.Model):
-    pedido = models.ForeignKey(pedido, null=True, on_delete=models.SET_NULL)
-    producto = models.ForeignKey(producto, null=True, on_delete=models.SET_NULL)
+    @property
+    def get_carrito_total(self): # total de la compra
+        items = self.prodpedido_set.all()
+        total = sum([item.get_total for item in items])
+        return total
+
+    @property
+    def get_carrito_items(self): # cantidad de productos
+        items = self.prodpedido_set.all()
+        total = sum([item.cantidad for item in items])
+        return total
+
+class ProdPedido(models.Model):
+    pedido = models.ForeignKey(Pedidos, null=True, on_delete=models.SET_NULL)
+    producto = models.ForeignKey(Productos, null=True, on_delete=models.SET_NULL)
     cantidad = models.IntegerField(default=0, null=True, blank=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True, null=True)
 
-    def __str__(self):
-        return self.producto.nombre
+    @property
+    def get_total(self):
+        total = self.producto.precio * self.cantidad
+        return total
 
-class dir_despacho(models.Model):
-    cliente = models.ForeignKey(cliente, null=True, on_delete=models.SET_NULL)
-    pedido = models.ForeignKey(pedido, null=True, on_delete=models.SET_NULL)
+class DirDespacho(models.Model):
+    cliente = models.ForeignKey(Clientes, null=True, on_delete=models.SET_NULL)
+    pedido = models.ForeignKey(Pedidos, null=True, on_delete=models.SET_NULL)
     direccion = models.CharField(max_length=200, null=True)
     region = models.CharField(max_length=200, null=True)
     ciudad = models.CharField(max_length=200, null=True)

@@ -3,9 +3,9 @@ from .models import *
 
 # Register your models here.
 
-admin.site.register(cliente)
-admin.site.register(producto)
-admin.site.register(pedido)
-admin.site.register(prod_pedido)
-admin.site.register(dir_despacho)
+admin.site.register(Clientes)
+admin.site.register(Productos)
+admin.site.register(Pedidos)
+admin.site.register(ProdPedido)
+admin.site.register(DirDespacho)
 
