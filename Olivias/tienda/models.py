@@ -1,4 +1,5 @@
-from django.db import models
+from django.db import models  # se importa el modulo models de django
+# se importa el modelo User de django.contrib.auth.models
 from django.contrib.auth.models import User
 # Create your models here.
 
@@ -28,34 +29,39 @@ class Pedidos(models.Model):
     # Producto = models.ForeignKey(
     #     Producto, null=True, on_delete=models.SET_NULL)
     fecha_creacion = models.DateTimeField(auto_now_add=True, null=True)
-    estado = models.BooleanField(default=False) # completado o no completado
+    estado = models.BooleanField(default=False)  # completado o no completado
     id_transaccion = models.CharField(max_length=200, null=True)
 
     def __str__(self):
         return str(self.id)
 
-    @property
-    def get_carrito_total(self): # total de la compra
-        items = self.prodpedido_set.all()
+    @property  # se crea una propiedad
+    def get_carrito_total(self):  # total de la compra
+        items = self.prodpedido_set.all()  # se obtienen los items del pedido
+        # se obtiene el total de la compra
         total = sum([item.get_total for item in items])
-        return total
+        return total  # se retorna el total de la compra
 
     @property
-    def get_carrito_items(self): # cantidad de productos
-        items = self.prodpedido_set.all()
+    def get_carrito_items(self):  # cantidad de productos
+        items = self.prodpedido_set.all()  # se obtienen los items del pedido
+        # se obtiene la cantidad de productos
         total = sum([item.cantidad for item in items])
-        return total
+        return total  # se retorna la cantidad de productos
+
 
 class ProdPedido(models.Model):
     pedido = models.ForeignKey(Pedidos, null=True, on_delete=models.SET_NULL)
-    producto = models.ForeignKey(Productos, null=True, on_delete=models.SET_NULL)
+    producto = models.ForeignKey(
+        Productos, null=True, on_delete=models.SET_NULL)
     cantidad = models.IntegerField(default=0, null=True, blank=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True, null=True)
 
-    @property
-    def get_total(self):
-        total = self.producto.precio * self.cantidad
-        return total
+    @property  # se crea una propiedad
+    def get_total(self):  # total de la compra
+        total = self.producto.precio * self.cantidad  # se obtiene el total de la compra
+        return total  # se retorna el total de la compra
+
 
 class DirDespacho(models.Model):
     cliente = models.ForeignKey(Clientes, null=True, on_delete=models.SET_NULL)

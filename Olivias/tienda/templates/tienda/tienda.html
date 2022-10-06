@@ -13,7 +13,13 @@
         <div class="d-flex justify-content-between align-items-center">
           <div class="btn-group">
             <a href="#" class="btn btn-sm btn-outline-secondary">Ver</a>
-            <a href="#" class="btn btn-sm btn-outline-secondary">Agregar</a>
+            <button
+              data-producto="{{producto.id}}"
+              data-accion="add"
+              class="btn btn-sm btn-outline-secondary actualizar-carrito"
+            >
+              Agregar
+            </button>
           </div>
           <small class="text-muted">${{producto.precio|floatformat:0}}</small>
         </div>

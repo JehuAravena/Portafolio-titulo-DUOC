@@ -23,14 +23,15 @@
               placeholder="Correo electronico"
             />
           </div>
+          <hr />
         </div>
 
         <div id="shipping-info">
-          <hr />
           <p>Informacion de envío:</p>
           <hr />
           <div class="form-field">
             <input
+              required
               class="form-control"
               type="text"
               name="address"
@@ -39,6 +40,7 @@
           </div>
           <div class="form-field">
             <input
+              required
               class="form-control"
               type="text"
               name="city"
@@ -47,6 +49,7 @@
           </div>
           <div class="form-field">
             <input
+              required
               class="form-control"
               type="text"
               name="state"
@@ -76,6 +79,7 @@
     <br />
     <div class="box-element hidden" id="payment-info">
       <small>Metodos de pago</small>
+      <button id="realizar-pago">Realizar pago</button>
     </div>
   </div>
 
@@ -93,7 +97,9 @@
           <img class="row-image" src="{{item.producto.imagen.url}}" />
         </div>
         <div style="flex: 2"><p>{{item.producto.nombre}}1</p></div>
-        <div style="flex: 1"><p>${{item.producto.precio|floatformat:0}}</p></div>
+        <div style="flex: 1">
+          <p>${{item.producto.precio|floatformat:0}}</p>
+        </div>
         <div style="flex: 1"><p>x{{item.cantidad}}</p></div>
       </div>
       {% endfor %}
@@ -102,5 +108,87 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+  var user = "{{user}}"; // user es una variable que se pasa desde el backend
+  var total = "{{pedido.get_carrito_total|floatformat:0}}"; // total es una variable que se pasa desde el backend
+
+  if (user != "AnonymousUser") {
+    // Si el usuario esta logueado
+    document.getElementById("user-info").innerHTML = ""; // Se borra el formulario de informacion de usuario
+  }
+
+  const form = document.getElementById("form"); // Se obtiene el formulario
+  const formButton = document.getElementById("form-button"); // Se obtiene el boton del formulario
+  const formWrapper = document.getElementById("form-wrapper"); // Se obtiene el contenedor del formulario
+  const paymentInfo = document.getElementById("payment-info"); // Se obtiene el contenedor de informacion de pago
+
+  form.addEventListener("submit", (e) => {
+    // Se agrega un evento al formulario
+    e.preventDefault(); // Se evita que el formulario se envie
+    formButton.disabled = true; // Se deshabilita el boton del formulario
+    formButton.value = "Procesando..."; // Se cambia el texto del boton del formulario
+    formWrapper.classList.add("hidden"); // Se oculta el contenedor del formulario
+    paymentInfo.classList.remove("hidden"); // Se muestra el contenedor de informacion de pago
+  });
+
+  document // Se agrega un evento al boton de realizar pago
+    .getElementById("realizar-pago") // Se obtiene el boton de realizar pago
+    .addEventListener("click", function (e) {
+      // Se agrega un evento al boton de realizar pago
+      enviarDatosFormulario(); // Se envian los datos del formulario
+    });
+
+  function enviarDatosFormulario() {
+    // Funcion para enviar los datos del formulario
+    console.log("enviando datos"); // Se imprime en consola
+
+    var dataFormUsuaio = {
+      // Se crea un objeto con los datos del formulario de usuario
+      name: null, // Nombre
+      email: null, // Correo electronico
+    };
+
+    var dataFormEnvio = {
+      // Se crea un objeto con los datos del formulario de envio
+      address: form.address.value, // Direccion
+      city: form.city.value, // Ciudad
+      state: form.state.value, // Region
+      zipcode: form.zipcode.value, // Codigo postal
+    };
+
+    if (user == "AnonymousUser") {
+      // Si el usuario no esta logueado
+      dataFormUsuaio.name = form.name.value; // Se obtiene el nombre del formulario
+      dataFormUsuaio.email = form.email.value; // Se obtiene el correo electronico del formulario
+    }
+
+    var url = '{% url "procesar_orden" %}'; // Se obtiene la url de procesar orden
+    fetch(url, {
+      // Se hace una peticion fetch
+      method: "POST", // Se envia por metodo POST
+      headers: {
+        // Se envia el header
+        "Content-Type": "application/json", // Se envia el tipo de contenido
+        "X-CSRFToken": "{{ csrf_token }}", // Se envia el token csrf
+      },
+      body: JSON.stringify({
+        // Se envia el cuerpo de la peticion
+        dataFormUsuaio: dataFormUsuaio, // Se envia el objeto con los datos del formulario de usuario
+        dataFormEnvio: dataFormEnvio, // Se envia el objeto con los datos del formulario de envio
+      }), // Se envia el cuerpo de la peticion
+    })
+      .then((response) => {
+        // Se obtiene la respuesta
+        return response.json(); // Se convierte la respuesta a json
+      })
+      .then((data) => {
+        // Se obtiene los datos
+        console.log("data", data); // Se imprime en consola
+        alert("Orden procesada"); // Se muestra un mensaje
+        window.location.href = "{% url 'tienda' %}"; // Se redirecciona a la tienda
+      });
+  }
+</script>
 
 {% endblock content%}

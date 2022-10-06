@@ -1,18 +1,12 @@
-{% extends 'tienda/inicio.html' %} {% load static %}
+{% extends 'tienda/inicio.html' %} {% load static %} {% block content %}
 
-<!DOCTYPE html>
-<html lang="es-CL">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nosotros</title>
-    <!-- Carga CSS -->
-    <link rel="stylesheet" href="{% static 'css/estilos.css' %}" />
-  </head>
-  <body>
-    {% block content %}
-    <h1>Nosotros</h1>
-    {% endblock content%}
-  </body>
-</html>
+<div class="bg-image">
+  <img
+    src="{% static 'imagenes/FondoNosotros.jpg' %}"
+    style="height: 100vh"
+  />
+</div>
+<div class="container">
+  <h1>Nosotros</h1>
+</div>
+{% endblock content%}
