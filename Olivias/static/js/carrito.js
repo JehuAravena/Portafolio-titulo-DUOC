@@ -12,11 +12,37 @@ for (var i = 0; i < actualizarBtns.length; i++) {
     if (user === "AnonymousUser") {
       //si el usuario es anonimo
       console.log("No estas logueado"); //muestra en consola que no esta logueado
+      addCookieItem(productoId, accion); //agrega el producto al carrito
     } else {
       //si no
       actualizarCarrito(productoId, accion); //llama a la funcion actualizarCarrito
     }
   });
+}
+
+function addCookieItem(productoId, accion) {
+  console.log("Usuario no logueado"); //muestra en consola que el usuario no esta logueado
+
+  if (accion == "add") {
+    if (carrito[productoId] == undefined) {
+      //si el producto no esta en el carrito
+      carrito[productoId] = { cantidad: 1 }; //agrega el producto al carrito
+    } else {
+      carrito[productoId]["cantidad"] += 1; //si el producto ya esta en el carrito, aumenta la cantidad
+    }
+  }
+
+  if (accion == "remove") {
+    carrito[productoId]["cantidad"] -= 1; //si el producto ya esta en el carrito, disminuye la cantidad
+
+    if (carrito[productoId]["cantidad"] <= 0) {
+      console.log("Eliminar item"); //muestra en consola que se va a eliminar el item
+      delete carrito[productoId]; //elimina el producto del carrito
+    }
+  }
+  console.log("carrito:", carrito); //muestra en consola el carrito
+  document.cookie = "carrito=" + JSON.stringify(carrito) + ";domain=;path=/";
+  location.reload(); //recarga la pagina
 }
 
 function actualizarCarrito(productoId, accion) {

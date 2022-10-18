@@ -4,6 +4,7 @@
   <div class="col-lg-6">
     <div class="box-element" id="form-wrapper">
       <form id="form">
+        {% csrf_token %}
         <div id="user-info">
           <div class="form-field">
             <input
@@ -147,6 +148,7 @@
       // Se crea un objeto con los datos del formulario de usuario
       name: null, // Nombre
       email: null, // Correo electronico
+      total: total, // Total de la compra
     };
 
     var dataFormEnvio = {
@@ -168,27 +170,35 @@
       // Se hace una peticion fetch
       method: "POST", // Se envia por metodo POST
       headers: {
-        // Se envia el header
         "Content-Type": "application/json", // Se envia el tipo de contenido
         "X-CSRFToken": "{{ csrf_token }}", // Se envia el token csrf
       },
       body: JSON.stringify({
-        // Se envia el cuerpo de la peticion
-        dataFormUsuaio: dataFormUsuaio, // Se envia el objeto con los datos del formulario de usuario
-        dataFormEnvio: dataFormEnvio, // Se envia el objeto con los datos del formulario de envio
-      }), // Se envia el cuerpo de la peticion
+        // Se envia el cuerpo del mensaje
+        form: dataFormUsuaio, // Se envian los datos del formulario de usuario
+        formEnvio: dataFormEnvio, // Se envian los datos del formulario de envio
+        total: total, // Se envia el total
+      }),
     })
       .then((response) => {
         // Se obtiene la respuesta
         return response.json(); // Se convierte la respuesta a json
       })
       .then((data) => {
-        // Se obtiene los datos
-        console.log("data", data); // Se imprime en consola
-        alert("Orden procesada"); // Se muestra un mensaje
-        window.location.href = "{% url 'tienda' %}"; // Se redirecciona a la tienda
+        alert("Orden procesada"); // Se muestra un mensaje de alerta
+        carrito = {}; // Se vacia el carrito
+        document.cookie = "carrito=" + JSON.stringify(carrito) + ";domain=;path=/"; // Se actualiza el carrito en el navegador
+        window.location.href = "{% url 'inicio' %}"; // Se redirecciona a la pagina de inicio
       });
   }
+</script>
+<script type="text/javascript">
+  // espera 0.5 segundos para ejecutar la funcion
+  setTimeout(function () {
+    csrftoken = form.getElementsByTagName("input")[0].value; // Se obtiene el token csrf
+    console.log(csrftoken);
+    console.log(form.getElementsByTagName("input")[0].value);
+  }, 500);
 </script>
 
 {% endblock content%}

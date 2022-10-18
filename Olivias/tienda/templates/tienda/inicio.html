@@ -188,6 +188,28 @@
         return cookieValue;
       }
       var csrftoken = getToken("csrftoken");
+      console.log(csrftoken);
+
+      function getCookie(name) {
+        var cookieArr = document.cookie.split(";");
+
+        for (var i = 0; i < cookieArr.length; i++) {
+          var cookiePair = cookieArr[i].split("=");
+          if (name == cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+          }
+        }
+        return null;
+      }
+      var carrito = JSON.parse(getCookie("carrito"));
+      if(carrito == null){
+        carrito = {}
+        console.log("Carrito creado")
+        document.cookie = "carrito=" + JSON.stringify(carrito);
+      }
+
+      
+      console.log(carrito);
     </script>
     <!-- JavaScript Bundle with Popper -->
     <script

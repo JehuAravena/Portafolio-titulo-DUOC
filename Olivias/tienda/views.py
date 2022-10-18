@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-import json
-
 from numpy import product
+import datetime
+import json
 
 # se importan los modelos de la base de datos
 from .models import *
+from . utils import *
 
 # Create your views here.
 
@@ -30,7 +31,6 @@ def contacto(request):
 
 
 def tienda(request):
-    # se obtienen todos los productos de la base de datos
     productos = Productos.objects.all()
     # se crea un diccionario con los productos
     context = {'productos': productos}
@@ -44,39 +44,23 @@ def login(request):
 
 
 def carrito(request):
-    if request.user.is_authenticated:  # si el usuario esta autenticado
-        cliente = request.user.clientes  # se obtiene el cliente
-        pedido, creado = Pedidos.objects.get_or_create(  # se obtiene el pedido, si no existe se crea
-            cliente=cliente, estado=False)  # el pedido se crea con el cliente y el estado en False
-        items = pedido.prodpedido_set.all()  # se obtienen los items del pedido
-        # se obtiene el numero de items del pedido
-        itemsCarrito = pedido.get_carrito_items
-    else:  # si el usuario no esta autenticado
-        items = []  # se crea una lista vacia
-        # se crea un diccionario con el total y el numero de items en 0
-        pedido = {'get_carrito_total': 0, 'get_carrito_items': 0}
-        # se obtiene el numero de items del pedido
-        itemsCarrito = pedido['get_carrito_items']
-
-    # se crea un diccionario con los items y el pedido
-    productos = Productos.objects.all()
-    # se renderiza la pagina carrito.html con los items y el pedido
-    context = {'items': items, 'pedido': pedido,
-               'productos': productos, 'itemsCarrito': itemsCarrito}
+    data = cartData(request)
+    items = data['items']
+    pedido = data['pedido']
+    itemsCarrito = data['itemsCarrito']
+    
+    context = {'items': items, 'pedido': pedido, 'itemsCarrito': itemsCarrito}
+    
     # se renderiza la pagina carrito.html con los items y el pedido
     return render(request, 'tienda/carrito.html', context)
 
 
 def venta(request):
-    if request.user.is_authenticated:  # si el usuario esta autenticado
-        cliente = request.user.clientes  # se obtiene el cliente
-        pedido, creado = Pedidos.objects.get_or_create(  # se obtiene el pedido, si no existe se crea
-            cliente=cliente, estado=False)  # el pedido se crea con el cliente y el estado en False
-        items = pedido.prodpedido_set.all()  # se obtienen los items del pedido
-    else:  # si el usuario no esta autenticado
-        items = []  # se crea una lista vacia
-        # se crea un diccionario con el total y el numero de items en 0
-        pedido = {'get_carrito_total': 0, 'get_carrito_items': 0}
+
+    data = cartData(request)
+    items = data['items']
+    pedido = data['pedido']
+    itemsCarrito = data['itemsCarrito']
 
     # se crea un diccionario con los items y el pedido
     context = {'items': items, 'pedido': pedido}
@@ -117,5 +101,34 @@ def actualizarItem(request):
 
 
 def procesarOrden(request):
-    print('Data:', request.body)  # se imprime la informacion del body
-    return JsonResponse('Orden procesada', safe=False)
+    # se obtiene el id de la transaccion
+    transaction_id = datetime.datetime.now().timestamp()
+    data = json.loads(request.body)  # se obtiene la informacion del body
+
+    if request.user.is_authenticated:  # si el usuario esta autenticado
+        cliente = request.user.clientes  # se obtiene el cliente
+        pedido, creado = Pedidos.objects.get_or_create(  # se obtiene el pedido, si no existe se crea
+            cliente=cliente, estado=False)  # el pedido se crea con el cliente y el estado en False
+
+    else:  # si el usuario no esta autenticado
+        cliente, pedido = guestOrder(request, data)  # se crea un pedido para el usuario invitado
+
+    total = float(data['form']['total'])
+    # se asigna el id de la transaccion al pedido
+    pedido.transaction_id = transaction_id
+
+    if total == pedido.get_carrito_total:  # si el total del pedido es igual al total del carrito
+        pedido.estado = True  # el pedido se marca como completado
+    pedido.save()  # se guarda el pedido
+
+    if pedido.estado:  # si el pedido esta completado
+        # se crea la direccion de envio
+        DirDespacho.objects.create(
+            cliente=cliente,
+            pedido=pedido,
+            direccion=data['formEnvio']['address'],
+            ciudad=data['formEnvio']['city'],
+            region=data['formEnvio']['state'],
+        )
+
+    return JsonResponse('Pago completado...', safe=False)
