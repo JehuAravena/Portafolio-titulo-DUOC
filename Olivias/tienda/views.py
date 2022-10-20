@@ -102,7 +102,7 @@ def actualizarItem(request):
 
 def procesarOrden(request):
     # se obtiene el id de la transaccion
-    transaction_id = datetime.datetime.now().timestamp()
+    id_transaccion = datetime.datetime.now().timestamp()
     data = json.loads(request.body)  # se obtiene la informacion del body
 
     if request.user.is_authenticated:  # si el usuario esta autenticado
@@ -115,7 +115,7 @@ def procesarOrden(request):
 
     total = float(data['form']['total'])
     # se asigna el id de la transaccion al pedido
-    pedido.transaction_id = transaction_id
+    pedido.id_transaccion = id_transaccion
 
     if total == pedido.get_carrito_total:  # si el total del pedido es igual al total del carrito
         pedido.estado = True  # el pedido se marca como completado

@@ -150,3 +150,5 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = 'static/imagenes/'
 
 MEDIA_URL = '/media/'
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups' 

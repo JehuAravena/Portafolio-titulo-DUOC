@@ -80,7 +80,8 @@
     <br />
     <div class="box-element hidden" id="payment-info">
       <small>Metodos de pago</small>
-      <button id="realizar-pago">Realizar pago</button>
+      <!-- <button id="realizar-pago">Realizar pago</button> -->
+      <div id="paypal-button-container"></div>
     </div>
   </div>
 
@@ -110,6 +111,40 @@
   </div>
 </div>
 
+<!-- Implementacion Paypal -->
+<script src="https://www.paypal.com/sdk/js?client-id=ARye2xyGwXWXMRJdcH3rp8IoAw8FNsK73ckgduznXX7Xc5oSwYWLgZbP2Dbn5Ff2_FkQ3a73YfNuzy-d&currency=USD"></script>
+
+<script>
+  var total = "{{pedido.get_carrito_total|floatformat:0}}";
+
+  // Render the PayPal button into #paypal-button-container
+  paypal
+    .Buttons({
+      // Set up the transaction
+      createOrder: function (data, actions) {
+        return actions.order.create({
+          purchase_units: [
+            {
+              amount: {
+                value: total,
+              },
+            },
+          ],
+        });
+      },
+
+      // Finalize the transaction
+      onApprove: function (data, actions) {
+        return actions.order.capture().then(function (orderData) {
+          enviarDatosFormulario();
+        });
+      },
+    })
+    .render("#paypal-button-container");
+</script>
+
+<!-- Fin implementacion Paypal-->
+
 <script type="text/javascript">
   var user = "{{user}}"; // user es una variable que se pasa desde el backend
   var total = "{{pedido.get_carrito_total|floatformat:0}}"; // total es una variable que se pasa desde el backend
@@ -132,13 +167,14 @@
     formWrapper.classList.add("hidden"); // Se oculta el contenedor del formulario
     paymentInfo.classList.remove("hidden"); // Se muestra el contenedor de informacion de pago
   });
-
+  /*
   document // Se agrega un evento al boton de realizar pago
     .getElementById("realizar-pago") // Se obtiene el boton de realizar pago
     .addEventListener("click", function (e) {
       // Se agrega un evento al boton de realizar pago
       enviarDatosFormulario(); // Se envian los datos del formulario
     });
+    */
 
   function enviarDatosFormulario() {
     // Funcion para enviar los datos del formulario
@@ -187,7 +223,8 @@
       .then((data) => {
         alert("Orden procesada"); // Se muestra un mensaje de alerta
         carrito = {}; // Se vacia el carrito
-        document.cookie = "carrito=" + JSON.stringify(carrito) + ";domain=;path=/"; // Se actualiza el carrito en el navegador
+        document.cookie =
+          "carrito=" + JSON.stringify(carrito) + ";domain=;path=/"; // Se actualiza el carrito en el navegador
         window.location.href = "{% url 'inicio' %}"; // Se redirecciona a la pagina de inicio
       });
   }
