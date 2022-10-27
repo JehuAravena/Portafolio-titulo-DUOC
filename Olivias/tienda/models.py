@@ -26,8 +26,6 @@ class Productos(models.Model):
 
 class Pedidos(models.Model):
     cliente = models.ForeignKey(Clientes, null=True, on_delete=models.SET_NULL)
-    # Producto = models.ForeignKey(
-    #     Producto, null=True, on_delete=models.SET_NULL)
     fecha_creacion = models.DateTimeField(auto_now_add=True, null=True)
     estado = models.BooleanField(default=False)  # completado o no completado
     id_transaccion = models.CharField(max_length=200, null=True)

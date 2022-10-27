@@ -38,10 +38,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
+    # allauth para autenticación por email
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    # proveedores de autenticación
+    'allauth.socialaccount.providers.google',
 
     # Agregamos nuestra app tienda para que Django pueda reconocerla y trabajar con ella.
     'tienda.apps.TiendaConfig',
+
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -121,9 +133,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-CL'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Santiago'
 
 USE_I18N = True
 
@@ -151,4 +163,26 @@ MEDIA_ROOT = 'static/imagenes/'
 
 MEDIA_URL = '/media/'
 
-SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups' 
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'  # se autentica por email
+ACCOUNT_EMAIL_REQUIRED = True  # se requiere email
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # se requiere verificación de email
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3  # expira en 3 días
+
+# se cierra la sesión al hacer click en el link de logout
+ACCOUNT_LOGOUT_ON_GET = True
+
+LOGIN_REDIRECT_URL = '/'
+
+# esto es para que no se envie el correo, sino que se muestre en la consola
+# borra esto para que se envie el correo
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
