@@ -1,28 +1,51 @@
 {% extends 'tienda/inicio.html' %} {% load static %} {% block content %}
 <div class="row" style="padding: 2%">
-  <div class="col-md-4">
-    <div class="card mb-4 shadow-sm">
-      <img
-        class="card-img-top"
-        src="{{producto.imagen.url}}"
-        alt="Card image cap"
-      />
-      <div class="card-body">
-        <p class="card-text">{{producto.nombre}}</p>
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="btn-group">
-            <a href="#" class="btn btn-sm btn-outline-secondary">Ver</a>
-            <button
-              data-producto="{{producto.id}}"
-              data-accion="add"
-              class="btn btn-sm btn-outline-secondary actualizar-carrito"
-            >
-              Agregar
-            </button>
-          </div>
-          <small class="text-muted">${{producto.precio|floatformat:0}}</small>
+  <div class="card mb-2 shadow-sm col-lg-6" style="padding: 2%">
+    <img
+      class="card-img-top"
+      src="{{producto.imagen.url}}"
+      alt="Card image cap"
+    />
+    <div class="card-body">
+      <p class="card-text">{{producto.nombre}}</p>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="btn-group">
+          <button
+            data-producto="{{producto.id}}"
+            data-accion="add"
+            class="btn btn-sm btn-outline-secondary actualizar-carrito"
+          >
+            Agregar
+          </button>
         </div>
+        <small class="text-muted">${{producto.precio|floatformat:0}}</small>
       </div>
+      <hr />
+      <div class="card mb-4 shadow-sm" style="padding: 2%">
+        <h3>Descripción:</h3>
+        <p style="text-align: justify; padding: 2%">
+          {{ producto.descripcion }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="card mb-2 shadow-sm col-lg-6" style="padding: 2%">
+    <h3>Comentarios:</h3>
+    <div>
+      <div id="fb-root"></div>
+      <script
+        async
+        defer
+        crossorigin="anonymous"
+        src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v15.0"
+        nonce="Wuwe4XYi"
+      ></script>
+      <div
+        class="fb-comments"
+        data-href="http://127.0.0.1:8000/producto/prd/{{producto.id}}"
+        data-width="100%"
+        data-numposts="5"
+      ></div>
     </div>
   </div>
 </div>

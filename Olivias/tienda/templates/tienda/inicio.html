@@ -72,95 +72,120 @@
     <hr />
 
     {% block content %}
-    <div class="container">
-      <div
-        id="carouselExampleCaptions"
-        class="carousel slide"
-        data-bs-ride="false"
-      >
-        <div class="carousel-indicators">
-          <button
-            type="button"
-            data-bs-target="#carouselExampleCaptions"
-            data-bs-slide-to="0"
-            class="active"
-            aria-current="true"
-            aria-label="Slide 1"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#carouselExampleCaptions"
-            data-bs-slide-to="1"
-            aria-label="Slide 2"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#carouselExampleCaptions"
-            data-bs-slide-to="2"
-            aria-label="Slide 3"
-          ></button>
-        </div>
-        <div class="carousel-inner">
-          {% for producto in productos|slice:":3" %}
-          <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            <img
-              src="{{ producto.imagen.url }}"
-              class="d-block w-100"
-              alt="{{ producto.nombre }}"
-            />
-            <div class="carousel-caption d-none d-md-block">
-              <h5
-                style="
-                  color: #ffffff;
-                  background-color: #000000;
-                  opacity: 0.8;
-                  border-radius: 50px 20px;
-                  padding: 1%;
-                "
-              >
-                {{ producto.nombre }}
-              </h5>
-              <p
-                style="
-                  color: #ffffff;
-                  background-color: #000000;
-                  opacity: 0.8;
-                  border-radius: 50px 20px;
-                  padding: 2%;
-                "
-              >
-                {{ producto.descripcion }}
-              </p>
+    <div class="row" style="padding: 2%">
+      <div class="card mb-2 shadow-sm col-lg-6" style="padding: 2%">
+        <div class="container">
+          <div
+            id="carouselExampleCaptions"
+            class="carousel slide"
+            data-bs-ride="false"
+          >
+            <div class="carousel-indicators">
+              <button
+                type="button"
+                data-bs-target="#carouselExampleCaptions"
+                data-bs-slide-to="0"
+                class="active"
+                aria-current="true"
+                aria-label="Slide 1"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#carouselExampleCaptions"
+                data-bs-slide-to="1"
+                aria-label="Slide 2"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#carouselExampleCaptions"
+                data-bs-slide-to="2"
+                aria-label="Slide 3"
+              ></button>
             </div>
+            <div class="carousel-inner">
+              {% for producto in productos|slice:":3" %}
+              <div
+                class="carousel-item {% if forloop.first %}active{% endif %}"
+              >
+                <img
+                  src="{{ producto.imagen.url }}"
+                  class="d-block w-100"
+                  alt="{{ producto.nombre }}"
+                />
+                <div class="carousel-caption d-none d-md-block">
+                  <h5
+                    style="
+                      color: #ffffff;
+                      background-color: #000000;
+                      opacity: 0.8;
+                      border-radius: 50px 20px;
+                      padding: 1%;
+                    "
+                  >
+                    {{ producto.nombre }}
+                  </h5>
+                  <p
+                    style="
+                      color: #ffffff;
+                      background-color: #000000;
+                      opacity: 0.8;
+                      border-radius: 50px 20px;
+                      padding: 2%;
+                    "
+                  >
+                    {{ producto.descripcion }}
+                  </p>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            <button
+              class="carousel-control-prev"
+              type="button"
+              data-bs-target="#carouselExampleCaptions"
+              data-bs-slide="prev"
+            >
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button
+              class="carousel-control-next"
+              type="button"
+              data-bs-target="#carouselExampleCaptions"
+              data-bs-slide="next"
+            >
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Next</span>
+            </button>
           </div>
-          {% endfor %}
+          <hr />
+          <center>
+            <a href="{% url 'tienda' %}" class="btn btn-info btn-lg"
+              >Visitar Tienda</a
+            >
+          </center>
         </div>
-        <button
-          class="carousel-control-prev"
-          type="button"
-          data-bs-target="#carouselExampleCaptions"
-          data-bs-slide="prev"
-        >
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button
-          class="carousel-control-next"
-          type="button"
-          data-bs-target="#carouselExampleCaptions"
-          data-bs-slide="next"
-        >
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
       </div>
-      <hr />
-      <center>
-        <a href="{% url 'tienda' %}" class="btn btn-info btn-lg"
-          >Visitar Tienda</a
+      <div class="card mb-2 shadow-sm col-lg-6" style="padding: 2%">
+        <a
+          class="twitter-timeline data-height= 80%" "
+          href="https://twitter.com/The_Ech_?ref_src=twsrc%5Etfw"
+          >Tweets by The_Ech_</a
         >
-      </center>
+        <script
+          async
+          src="https://platform.twitter.com/widgets.js"
+          charset="utf-8"
+        ></script>
+      </div>
     </div>
+
     {% endblock content%}
 
     <!-- Carga JS -->
@@ -202,13 +227,12 @@
         return null;
       }
       var carrito = JSON.parse(getCookie("carrito"));
-      if(carrito == null){
-        carrito = {}
-        console.log("Carrito creado")
+      if (carrito == null) {
+        carrito = {};
+        console.log("Carrito creado");
         document.cookie = "carrito=" + JSON.stringify(carrito);
       }
 
-      
       console.log(carrito);
     </script>
     <!-- JavaScript Bundle with Popper -->
