@@ -1,0 +1,130 @@
+{% extends 'tienda/inicio.html' %} {% load static %} {% block content %}
+
+<style>
+  /* animacion de resaltar fondo */
+
+  @keyframes resaltar {
+    0% {
+      background-color: #ffcc00;
+    }
+    100% {
+      background-color: #ffcc00;
+    }
+  }
+  h1 {
+    animation: resaltar 1s ease-out 1s 1 normal;
+    animation: resaltar 1s ease-out 1s 1 normal;
+    text-align: center;
+    border-radius: 20px;
+  }
+</style>
+
+<div class="container-sm">
+  <h1>Se ha iniciado la sesión con éxito</h1>
+</div>
+
+<div class="container-sm">
+  <div class="container">
+    <div
+      id="carouselExampleCaptions"
+      class="carousel slide"
+      data-bs-ride="false"
+    >
+      <div class="carousel-indicators">
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="0"
+          class="active"
+          aria-current="true"
+          aria-label="Slide 1"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="1"
+          aria-label="Slide 2"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="2"
+          aria-label="Slide 3"
+        ></button>
+      </div>
+      <div class="carousel-inner">
+        {% for producto in productos|slice:":3" %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <img
+            src="{{ producto.imagen.url }}"
+            class="d-block w-100"
+            alt="{{ producto.nombre }}"
+          />
+          <div class="carousel-caption d-none d-md-block">
+            <h5
+              style="
+                color: #ffffff;
+                background-color: #000000;
+                opacity: 0.8;
+                border-radius: 50px 20px;
+                padding: 1%;
+              "
+            >
+              {{ producto.nombre }}
+            </h5>
+            <p
+              style="
+                color: #ffffff;
+                background-color: #000000;
+                opacity: 0.8;
+                border-radius: 50px 20px;
+                padding: 2%;
+              "
+            >
+              {{ producto.descripcion }}
+            </p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+    <hr />
+
+    <center>
+      <div class="container-sm">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <a href="{% url 'account_logout' %}" class="btn btn-danger btn-lg"
+                >Cerrar Sesión</a
+              >
+              <a href="{% url 'tienda' %}" class="btn btn-info btn-lg"
+                >Visitar Tienda</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </center>
+  </div>
+
+  {% endblock content%}
+</div>

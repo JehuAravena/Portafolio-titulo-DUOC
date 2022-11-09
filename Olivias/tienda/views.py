@@ -48,9 +48,9 @@ def carrito(request):
     items = data['items']
     pedido = data['pedido']
     itemsCarrito = data['itemsCarrito']
-    
+
     context = {'items': items, 'pedido': pedido, 'itemsCarrito': itemsCarrito}
-    
+
     # se renderiza la pagina carrito.html con los items y el pedido
     return render(request, 'tienda/carrito.html', context)
 
@@ -111,7 +111,8 @@ def procesarOrden(request):
             cliente=cliente, estado=False)  # el pedido se crea con el cliente y el estado en False
 
     else:  # si el usuario no esta autenticado
-        cliente, pedido = guestOrder(request, data)  # se crea un pedido para el usuario invitado
+        # se crea un pedido para el usuario invitado
+        cliente, pedido = guestOrder(request, data)
 
     total = float(data['form']['total'])
     # se asigna el id de la transaccion al pedido
@@ -132,3 +133,18 @@ def procesarOrden(request):
         )
 
     return JsonResponse('Pago completado...', safe=False)
+
+
+def ingresado(request):
+    # se obtienen todos los productos de la base de datos
+    productos = Productos.objects.all()
+    # se crea un diccionario con los productos
+    context = {'productos': productos}
+    # se renderiza la pagina ingresado.html con los productos
+    return render(request, 'tienda/ingresado.html', context)
+
+
+def producto(request, slug, id):
+    producto = Productos.objects.get(id=id)  # se obtiene el producto
+
+    return render(request, 'tienda/producto.html', {'producto': producto})

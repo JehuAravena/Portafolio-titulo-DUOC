@@ -181,7 +181,7 @@ ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3  # expira en 3 días
 # se cierra la sesión al hacer click en el link de logout
 ACCOUNT_LOGOUT_ON_GET = False
 
-LOGIN_REDIRECT_URL = "{% url 'account_logout' %}"
+LOGIN_REDIRECT_URL = "/ingresado/"  # redirecciona a la página de ingresado
 
 # esto es para que no se envie el correo, sino que se muestre en la consola
 # borra esto para que se envie el correo
