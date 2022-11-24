@@ -1,12 +1,32 @@
 {% extends 'tienda/inicio.html' %} {% load static %} {% block content %}
-
-<div class="bg-image">
-  <img
-    src="{% static 'imagenes/FondoNosotros.jpg' %}"
-    style="height: 100vh"
-  />
-</div>
-<div class="container">
-  <h1>Nosotros</h1>
+<div>
+  <h1 class="container">Sobre nosotros</h1>
+  <div
+    class="container card shadow-sm"
+    style="
+      padding: 5%;
+      background-image: url({% static 'imagenes/FondoNosotros.jpg'%});"
+  >
+    <div class="container card shadow-sm">
+      <p>
+        Olivias Panadería & Pastelería Saludable es una empresa familiar
+        dedicada a la elaboración de productos de panadería y pastelería
+        saludables, elaborando productos para diferentes tipos de alergias
+        alimentarias, principalmente para diabéticos y celíacos.
+      </p>
+      <p>
+        La misión de nuestro emprendimiento es entregar un producto que cubra
+        los diferentes tipos de problemas de salud utilizando materias primas de
+        alta calidad a través de la compra de insumos locales.
+      </p>
+      <p>
+        Se busca generar una línea de productos destinados a diferentes
+        problemas de salud. La persona encargada del negocio tiene una alta
+        formación tanto a nivel nacional como internacional, así como un máster
+        en enfermedades celíacas. Lo que garantiza que los productos son de
+        buena calidad y que cumplen con las necesidades de sus clientes.
+      </p>
+    </div>
+  </div>
 </div>
 {% endblock content%}

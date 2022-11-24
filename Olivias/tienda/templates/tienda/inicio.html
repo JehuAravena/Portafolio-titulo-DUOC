@@ -54,6 +54,11 @@
             </li>
           </ul>
           <div class="form-inline my-2 my-lg-0">
+            {% if request.user.is_superuser %}
+            <a class="btn btn-outline-success" href="{% url 'admin:index' %}">
+              Administrar
+            </a>
+            {% endif %}
             <a
               href="{% url 'account_login' %}"
               class="material-symbols-rounded btn btn-warning btn-lg"
@@ -73,7 +78,7 @@
 
     {% block content %}
     <div class="row" style="padding: 2%">
-      <div class="card mb-2 shadow-sm col-lg-6" style="padding: 2%">
+      <div class="card mb-2 shadow-sm col-lg-8" style="padding: 2%">
         <div class="container">
           <div
             id="carouselExampleCaptions"
@@ -172,11 +177,12 @@
           </center>
         </div>
       </div>
-      <div class="card mb-2 shadow-sm col-lg-6" style="padding: 2%">
+      <div class="card mb-2 shadow-sm col" style="padding: 2%">
         <a
-          class="twitter-timeline data-height= 80%" "
-          href="https://twitter.com/The_Ech_?ref_src=twsrc%5Etfw"
-          >Tweets by The_Ech_</a
+          class="twitter-timeline"
+          data-lang="es"
+          href="https://twitter.com/OliviaPanaderia?ref_src=twsrc%5Etfw"
+          >Tweets de OliviaPanaderia</a
         >
         <script
           async
