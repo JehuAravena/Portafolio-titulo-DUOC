@@ -198,8 +198,8 @@
     <script src="{% static 'js/carrito.js' %}"></script>
     <!-- Script usuario -->
     <script type="text/javascript">
-      user = "{{request.user}}"; //Obtiene el usuario
-      console.log(user); //Muestra el usuario en la consola
+      user = "{{ request.user }}";
+      
 
       function getToken(name) {
         var cookieValue = null;

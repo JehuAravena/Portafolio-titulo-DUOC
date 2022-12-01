@@ -135,12 +135,27 @@ def procesarOrden(request):
     return JsonResponse('Pago completado...', safe=False)
 
 
-def ingresado(request):
-    # se obtienen todos los productos de la base de datos
+def ingresado(request):  # se obtienen todos los productos de la base de datos
     productos = Productos.objects.all()
     # se crea un diccionario con los productos
     context = {'productos': productos}
-    # se renderiza la pagina ingresado.html con los productos
+    # si el usuario esta autenticado
+    if request.user.is_authenticated:  # si el usuario esta autenticado
+        user = request.user  # se obtiene el usuario
+        nombre = user.username  # se obtiene el nombre del usuario
+        email = user.email  # se obtiene el email del usuario
+        # si el cliente no existe, se crea
+        cliente, creado = Clientes.objects.get_or_create(
+            user=user,
+            nombre=nombre,
+            email=email,
+            )
+        cliente.save()  # se guarda el cliente
+
+    else:  # si el usuario no esta autenticado
+        # no se hace nada
+        pass
+    # se renderiza la pagina ingresado.html
     return render(request, 'tienda/ingresado.html', context)
 
 
@@ -148,3 +163,14 @@ def producto(request, slug, id):
     producto = Productos.objects.get(id=id)  # se obtiene el producto
 
     return render(request, 'tienda/producto.html', {'producto': producto})
+
+# # crearCliente con usuario y email
+# def crearCliente(request):
+#     data = json.loads(request.body)  # se obtiene la informacion del body
+#     usuario = data['usuario']  # se obtiene el usuario
+#     email = data['email']  # se obtiene el email
+
+#     cliente, creado = Clientes.objects.get_or_create(  # se obtiene el cliente, si no existe se crea
+#         usuario=usuario, email=email)  # el cliente se crea con el usuario y el email
+
+#     return JsonResponse('Cliente creado...', safe=False)

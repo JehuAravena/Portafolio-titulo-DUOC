@@ -13,4 +13,5 @@ urlpatterns = [
     path('procesar_orden/', views.procesarOrden, name='procesar_orden'),
     path('ingresado/', views.ingresado, name='ingresado'),
     path('producto/<str:slug>/<int:id>/', views.producto, name='producto'),
+    path('crear_cliente/', views.clienteData, name='crear_cliente'),
 ]

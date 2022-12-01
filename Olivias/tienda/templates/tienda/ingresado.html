@@ -145,6 +145,10 @@
       charset="utf-8"
     ></script>
   </div>
+  {{ request.user.username|json_script:"user" }}
+  {{ request.user.email|json_script:"email" }}
 
   {% endblock content%}
+  <!-- Carga JS -->
+  <script src="{% static 'js/carrito.js' %}"></script>
 </div>

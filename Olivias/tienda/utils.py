@@ -90,3 +90,18 @@ def guestOrder(request, data):
             cantidad=item['cantidad']
         )
     return cliente, pedido
+
+def clienteData(request):
+    if request.user.is_authenticated: # si el usuario esta autenticado
+        user = User.objects.get(id=request.user.id) # se obtiene el usuario
+        # se obtiene el cliente, si no existe se crea
+        cliente, creado = Clientes.objects.get_or_create(
+            user=user,
+            nombre=User.username,
+            email=User.email,
+            )
+        return cliente
+    else: # si el usuario no esta autenticado
+        #no se hace nada
+        pass
+
