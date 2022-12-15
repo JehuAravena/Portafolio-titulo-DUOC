@@ -14,11 +14,12 @@
             data-producto="{{producto.id}}"
             data-accion="add"
             class="btn btn-sm btn-outline-secondary actualizar-carrito"
+            onclick="alert('Producto agregado al carrito')"
           >
             Agregar
           </button>
         </div>
-        <small class="text-muted">${{producto.precio|floatformat:0}}</small>
+        <small class="text-muted">${{producto.precio|floatformat:0}}/U</small>
       </div>
       <hr />
       <div class="card mb-4 shadow-sm" style="padding: 2%">
